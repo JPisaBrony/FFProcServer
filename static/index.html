@@ -11,17 +11,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1>FFMPEG SERVER</h1>
+                    <h1>FFMPEG PROCESSING SERVER</h1>
                     <div class="form-group">
                         <label>ffmpeg cmd</label>
                         <input class="form-control" id="cmd">
                     </div>
                     <button class="btn btn-primary" id="sendcmd">Submit</button>
                     <div class="form-group" style="padding-top: 50px;">
-                        <label>Output URL</label>
-                        <div class="form-control">
-                            <a id="out">URL will show up here</a>
-                        </div>
+                        <label>History</label>
+                        <ul class="list-group" id="history"></ul>
                     </div>
                 </div>
             </div>
@@ -37,10 +35,9 @@
             }).done(function(data) {
                 if(data.result) {
                     var out = url + data.result;
-                    $("#out").text(out);
-                    $("#out").attr("href", out);
+                    $("#history").prepend('<li class="list-group-item"><a href="' +out + '">' + out + '</a></li>');
                 } else if(data.error) {
-                    $("#out").text(data.error);
+                    $("#history").prepend('<li class="list-group-item">' + data.error + '</li>');
                 }
             });
         });
