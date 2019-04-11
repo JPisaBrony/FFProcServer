@@ -22,18 +22,17 @@ def ffmpeg():
     outDir = "static/" + vidID
     os.makedirs(outDir)
     cmd = request.json["cmd"].replace("ffmpeg ", "").replace("\"", "")
-    cmdArgs = ["ffmpeg"]
+    cmdArgs = ["ffmpeg", "-loglevel", "error"]
     for c in cmd.split(" "):
         cmdArgs.append(c)
-
-    proc = Popen(cmdArgs, cwd=outDir, stdout=PIPE)
+    proc = Popen(cmdArgs, cwd=outDir, stdout=PIPE, stderr=PIPE)
     stdout, stderr = proc.communicate()
 
     result = proc.wait()
     processing = False
     if result == 1:
         os.rmdir(outDir)
-        return jsonify({"error": "some error occured"})
+        return jsonify({"error": stderr})
     return jsonify({ "result": vidID + "/" + cmdArgs[-1] })
 
 if __name__ == "__main__":
